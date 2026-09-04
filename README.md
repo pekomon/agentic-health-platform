@@ -63,3 +63,11 @@ diagnosis, or treatment.
 
 Early development.
 
+## Local environment
+
+This repo uses direnv for project-scoped development secrets. The committed
+`.envrc` loads `OPENAI_API_KEY` and `OURA_CLIENT_SECRET` from macOS Keychain
+through the local `keychain` helper.
+
+Run `direnv allow` after reviewing `.envrc`. Use `.envrc.local` for
+machine-specific overrides; it is intentionally gitignored.
