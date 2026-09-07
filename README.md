@@ -71,3 +71,12 @@ through the local `keychain` helper.
 
 Run `direnv allow` after reviewing `.envrc`. Use `.envrc.local` for
 machine-specific overrides; it is intentionally gitignored.
+
+## Development commands
+
+```text
+npm ci
+npm run typecheck
+npm test -- --run
+npm run build
+```
