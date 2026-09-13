@@ -7,7 +7,11 @@ const OBSERVATION_ID_PATTERN = /^obs_[a-f0-9]{64}$/;
 const LOCAL_DATE_PATTERN = /^(\d{4})-(\d{2})-(\d{2})$/;
 const INSTANT_PATTERN =
   /^(\d{4}-\d{2}-\d{2})T(\d{2}):(\d{2}):(\d{2})(?:\.\d+)?(Z|[+-]\d{2}:\d{2})$/;
-const SOURCE_FIELD_ALLOWLIST = ["sleep.duration"] as const;
+const SOURCE_FIELD_ALLOWLIST = [
+  "sleep.duration", "oura.readiness_score", "oura.sleep_lowest_heart_rate",
+  "training.activity", "training.duration", "profile.goal", "profile.custom_goal",
+  "profile.allowed_training_types", "context.local_time", "context.bedtime", "context.available_minutes"
+] as const;
 
 function isLeapYear(year: number): boolean {
   return year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
@@ -159,12 +163,8 @@ const DerivationSchema = z.strictObject({
     .max(8)
 });
 
-export const SleepDurationObservationSchema = z
-  .strictObject({
+export const ObservationFieldsSchema = z.strictObject({
     id: z.string().regex(OBSERVATION_ID_PATTERN),
-    metric: z.literal("sleep.duration"),
-    value: z.number().finite().int().min(0),
-    unit: z.literal("seconds"),
     source: DataSourceSchema,
     effectiveDate: LocalDateSchema,
     period: PeriodSchema.nullable(),
@@ -174,7 +174,14 @@ export const SleepDurationObservationSchema = z
       .min(1)
       .max(SOURCE_RECORD_ID_MAX_LENGTH)
       .nullable(),
-    sourceField: z.enum(SOURCE_FIELD_ALLOWLIST),
+});
+
+export const SleepDurationObservationSchema = ObservationFieldsSchema
+  .extend({
+    metric: z.literal("sleep.duration"),
+    value: z.number().finite().int().min(0),
+    unit: z.literal("seconds"),
+    sourceField: z.literal("sleep.duration"),
     derivation: DerivationSchema.nullable()
   })
   .superRefine((observation, context) => {
@@ -196,7 +203,7 @@ export const SleepDurationObservationSchema = z
     }
   });
 
-const MissingReasonSchema = z.enum([
+export const MissingReasonSchema = z.enum([
   "not_recorded",
   "not_provided",
   "permission_denied",
@@ -221,6 +228,13 @@ export const SleepDurationStateSchema = z.discriminatedUnion("status", [
   AvailableSleepDurationStateSchema,
   MissingSleepDurationStateSchema
 ]);
+
+export function createMetricStateSchema<T extends z.ZodType>(observation: T) {
+  return z.discriminatedUnion("status", [
+    z.strictObject({ status: z.literal("available"), observation }),
+    z.strictObject({ status: z.literal("missing"), reason: MissingReasonSchema })
+  ]);
+}
 
 export type LocalDate = z.infer<typeof LocalDateSchema>;
 export type Instant = z.infer<typeof InstantSchema>;

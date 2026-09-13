@@ -1,0 +1,810 @@
+{
+  "schemaVersion": 1,
+  "synthetic": true,
+  "scenarioId": "strength_goal_good_recovery",
+  "clock": "2026-01-14T08:00:00+02:00",
+  "profile": {
+    "goal": "STRENGTH",
+    "customGoal": null,
+    "allowedTrainingTypes": [
+      "STRENGTH",
+      "MOBILITY"
+    ]
+  },
+  "context": {
+    "localTime": "2026-01-14T08:00:00+02:00",
+    "timeZone": "Europe/Helsinki",
+    "bedtime": "2026-01-14T22:30:00+02:00",
+    "availableMinutes": 50
+  },
+  "sleep": [
+    {
+      "date": "2026-01-01",
+      "duration": {
+        "status": "available",
+        "observation": {
+          "id": "obs_2e66ef908919b6d09b15fb4314adeaf3707f6f94b258eb5b3653c8bad615a849",
+          "metric": "sleep.duration",
+          "value": 28800,
+          "unit": "seconds",
+          "source": {
+            "kind": "synthetic",
+            "channel": "fixture",
+            "datasetId": "strength_goal_good_recovery"
+          },
+          "effectiveDate": "2026-01-01",
+          "period": null,
+          "recordedAt": "2026-01-14T08:00:00+02:00",
+          "sourceRecordId": "sleep.duration-2026-01-01",
+          "sourceField": "sleep.duration",
+          "derivation": null
+        }
+      }
+    },
+    {
+      "date": "2026-01-02",
+      "duration": {
+        "status": "available",
+        "observation": {
+          "id": "obs_aac5d31da7329074a22e6b0ad40009081c0a664b81e79561fe2770444d847aeb",
+          "metric": "sleep.duration",
+          "value": 28800,
+          "unit": "seconds",
+          "source": {
+            "kind": "synthetic",
+            "channel": "fixture",
+            "datasetId": "strength_goal_good_recovery"
+          },
+          "effectiveDate": "2026-01-02",
+          "period": null,
+          "recordedAt": "2026-01-14T08:00:00+02:00",
+          "sourceRecordId": "sleep.duration-2026-01-02",
+          "sourceField": "sleep.duration",
+          "derivation": null
+        }
+      }
+    },
+    {
+      "date": "2026-01-03",
+      "duration": {
+        "status": "available",
+        "observation": {
+          "id": "obs_64d01ef126a1a2eeb9bf5d9e041908a3e9f572398572970b8d4676daef1c804b",
+          "metric": "sleep.duration",
+          "value": 28800,
+          "unit": "seconds",
+          "source": {
+            "kind": "synthetic",
+            "channel": "fixture",
+            "datasetId": "strength_goal_good_recovery"
+          },
+          "effectiveDate": "2026-01-03",
+          "period": null,
+          "recordedAt": "2026-01-14T08:00:00+02:00",
+          "sourceRecordId": "sleep.duration-2026-01-03",
+          "sourceField": "sleep.duration",
+          "derivation": null
+        }
+      }
+    },
+    {
+      "date": "2026-01-04",
+      "duration": {
+        "status": "available",
+        "observation": {
+          "id": "obs_bc27aa2007c84c49b42592987476e7393e419ce4ec9b9aa3aa4bb4395e048080",
+          "metric": "sleep.duration",
+          "value": 28800,
+          "unit": "seconds",
+          "source": {
+            "kind": "synthetic",
+            "channel": "fixture",
+            "datasetId": "strength_goal_good_recovery"
+          },
+          "effectiveDate": "2026-01-04",
+          "period": null,
+          "recordedAt": "2026-01-14T08:00:00+02:00",
+          "sourceRecordId": "sleep.duration-2026-01-04",
+          "sourceField": "sleep.duration",
+          "derivation": null
+        }
+      }
+    },
+    {
+      "date": "2026-01-05",
+      "duration": {
+        "status": "available",
+        "observation": {
+          "id": "obs_b4498b8469b646a83ef944abee3ff7d9e3a9678f73e2c92e7dc47447e5761f61",
+          "metric": "sleep.duration",
+          "value": 28800,
+          "unit": "seconds",
+          "source": {
+            "kind": "synthetic",
+            "channel": "fixture",
+            "datasetId": "strength_goal_good_recovery"
+          },
+          "effectiveDate": "2026-01-05",
+          "period": null,
+          "recordedAt": "2026-01-14T08:00:00+02:00",
+          "sourceRecordId": "sleep.duration-2026-01-05",
+          "sourceField": "sleep.duration",
+          "derivation": null
+        }
+      }
+    },
+    {
+      "date": "2026-01-06",
+      "duration": {
+        "status": "available",
+        "observation": {
+          "id": "obs_720cbce5c30a719f19ee0e0bc8396721a6ba5f80a948f7f570feb0e19266663c",
+          "metric": "sleep.duration",
+          "value": 28800,
+          "unit": "seconds",
+          "source": {
+            "kind": "synthetic",
+            "channel": "fixture",
+            "datasetId": "strength_goal_good_recovery"
+          },
+          "effectiveDate": "2026-01-06",
+          "period": null,
+          "recordedAt": "2026-01-14T08:00:00+02:00",
+          "sourceRecordId": "sleep.duration-2026-01-06",
+          "sourceField": "sleep.duration",
+          "derivation": null
+        }
+      }
+    },
+    {
+      "date": "2026-01-07",
+      "duration": {
+        "status": "available",
+        "observation": {
+          "id": "obs_f20908dcc598f9c65d7b7831bd23b4a2b2f1f6c88a2a3bf17d14cfcf2bc4f729",
+          "metric": "sleep.duration",
+          "value": 28800,
+          "unit": "seconds",
+          "source": {
+            "kind": "synthetic",
+            "channel": "fixture",
+            "datasetId": "strength_goal_good_recovery"
+          },
+          "effectiveDate": "2026-01-07",
+          "period": null,
+          "recordedAt": "2026-01-14T08:00:00+02:00",
+          "sourceRecordId": "sleep.duration-2026-01-07",
+          "sourceField": "sleep.duration",
+          "derivation": null
+        }
+      }
+    },
+    {
+      "date": "2026-01-08",
+      "duration": {
+        "status": "available",
+        "observation": {
+          "id": "obs_534ea1aeabcfaea7f4eea578fdb383ab6389a20dab597dcad1a10f5ac1f780cb",
+          "metric": "sleep.duration",
+          "value": 28800,
+          "unit": "seconds",
+          "source": {
+            "kind": "synthetic",
+            "channel": "fixture",
+            "datasetId": "strength_goal_good_recovery"
+          },
+          "effectiveDate": "2026-01-08",
+          "period": null,
+          "recordedAt": "2026-01-14T08:00:00+02:00",
+          "sourceRecordId": "sleep.duration-2026-01-08",
+          "sourceField": "sleep.duration",
+          "derivation": null
+        }
+      }
+    },
+    {
+      "date": "2026-01-09",
+      "duration": {
+        "status": "available",
+        "observation": {
+          "id": "obs_a05aa35a0e39677426daa9c5d74c30609ab5e5521e4d59e0ce77e0d89e494ff6",
+          "metric": "sleep.duration",
+          "value": 28800,
+          "unit": "seconds",
+          "source": {
+            "kind": "synthetic",
+            "channel": "fixture",
+            "datasetId": "strength_goal_good_recovery"
+          },
+          "effectiveDate": "2026-01-09",
+          "period": null,
+          "recordedAt": "2026-01-14T08:00:00+02:00",
+          "sourceRecordId": "sleep.duration-2026-01-09",
+          "sourceField": "sleep.duration",
+          "derivation": null
+        }
+      }
+    },
+    {
+      "date": "2026-01-10",
+      "duration": {
+        "status": "available",
+        "observation": {
+          "id": "obs_cc954d3e2617b4963af64a5b742f5f4d9f5cfd077cc6dbc5ce6ccf1dfd5c91ae",
+          "metric": "sleep.duration",
+          "value": 28800,
+          "unit": "seconds",
+          "source": {
+            "kind": "synthetic",
+            "channel": "fixture",
+            "datasetId": "strength_goal_good_recovery"
+          },
+          "effectiveDate": "2026-01-10",
+          "period": null,
+          "recordedAt": "2026-01-14T08:00:00+02:00",
+          "sourceRecordId": "sleep.duration-2026-01-10",
+          "sourceField": "sleep.duration",
+          "derivation": null
+        }
+      }
+    },
+    {
+      "date": "2026-01-11",
+      "duration": {
+        "status": "available",
+        "observation": {
+          "id": "obs_701191b6ed27e87ed87c059dfb2a0368fa385252bbfc8b37c72ebf9d665dcfe3",
+          "metric": "sleep.duration",
+          "value": 28800,
+          "unit": "seconds",
+          "source": {
+            "kind": "synthetic",
+            "channel": "fixture",
+            "datasetId": "strength_goal_good_recovery"
+          },
+          "effectiveDate": "2026-01-11",
+          "period": null,
+          "recordedAt": "2026-01-14T08:00:00+02:00",
+          "sourceRecordId": "sleep.duration-2026-01-11",
+          "sourceField": "sleep.duration",
+          "derivation": null
+        }
+      }
+    },
+    {
+      "date": "2026-01-12",
+      "duration": {
+        "status": "available",
+        "observation": {
+          "id": "obs_450cfa8abc2d81caef00474f917a3d726784cec32d05be91d12b906ac28e2c72",
+          "metric": "sleep.duration",
+          "value": 28800,
+          "unit": "seconds",
+          "source": {
+            "kind": "synthetic",
+            "channel": "fixture",
+            "datasetId": "strength_goal_good_recovery"
+          },
+          "effectiveDate": "2026-01-12",
+          "period": null,
+          "recordedAt": "2026-01-14T08:00:00+02:00",
+          "sourceRecordId": "sleep.duration-2026-01-12",
+          "sourceField": "sleep.duration",
+          "derivation": null
+        }
+      }
+    },
+    {
+      "date": "2026-01-13",
+      "duration": {
+        "status": "available",
+        "observation": {
+          "id": "obs_4ff39a66c9e5ce73375bcdac35490ab552dd38dc5b90f2edacf6e02595c609e2",
+          "metric": "sleep.duration",
+          "value": 28800,
+          "unit": "seconds",
+          "source": {
+            "kind": "synthetic",
+            "channel": "fixture",
+            "datasetId": "strength_goal_good_recovery"
+          },
+          "effectiveDate": "2026-01-13",
+          "period": null,
+          "recordedAt": "2026-01-14T08:00:00+02:00",
+          "sourceRecordId": "sleep.duration-2026-01-13",
+          "sourceField": "sleep.duration",
+          "derivation": null
+        }
+      }
+    },
+    {
+      "date": "2026-01-14",
+      "duration": {
+        "status": "available",
+        "observation": {
+          "id": "obs_e6b2ca89487c58fab2ec63fe1f39007ab4394bd2290e8746ebf1ba3f4fa11dcd",
+          "metric": "sleep.duration",
+          "value": 28800,
+          "unit": "seconds",
+          "source": {
+            "kind": "synthetic",
+            "channel": "fixture",
+            "datasetId": "strength_goal_good_recovery"
+          },
+          "effectiveDate": "2026-01-14",
+          "period": null,
+          "recordedAt": "2026-01-14T08:00:00+02:00",
+          "sourceRecordId": "sleep.duration-2026-01-14",
+          "sourceField": "sleep.duration",
+          "derivation": null
+        }
+      }
+    }
+  ],
+  "recovery": [
+    {
+      "date": "2026-01-01",
+      "readiness": {
+        "status": "available",
+        "observation": {
+          "id": "obs_83e8346426dd1b5c40d2bd4b12ea5f90b127a5fd8aca2edef96d0491720a54cf",
+          "metric": "oura.readiness_score",
+          "value": 85,
+          "unit": "score",
+          "source": {
+            "kind": "synthetic",
+            "channel": "fixture",
+            "datasetId": "strength_goal_good_recovery"
+          },
+          "effectiveDate": "2026-01-01",
+          "period": null,
+          "recordedAt": "2026-01-14T08:00:00+02:00",
+          "sourceRecordId": "oura.readiness_score-2026-01-01",
+          "sourceField": "oura.readiness_score",
+          "derivation": null
+        }
+      },
+      "lowestSleepHeartRate": {
+        "status": "missing",
+        "reason": "not_recorded"
+      }
+    },
+    {
+      "date": "2026-01-02",
+      "readiness": {
+        "status": "available",
+        "observation": {
+          "id": "obs_12f5f1165e834ba7b5e1f70c92894c9dd317d8ca404765c9b07abf3684503f2e",
+          "metric": "oura.readiness_score",
+          "value": 85,
+          "unit": "score",
+          "source": {
+            "kind": "synthetic",
+            "channel": "fixture",
+            "datasetId": "strength_goal_good_recovery"
+          },
+          "effectiveDate": "2026-01-02",
+          "period": null,
+          "recordedAt": "2026-01-14T08:00:00+02:00",
+          "sourceRecordId": "oura.readiness_score-2026-01-02",
+          "sourceField": "oura.readiness_score",
+          "derivation": null
+        }
+      },
+      "lowestSleepHeartRate": {
+        "status": "missing",
+        "reason": "not_recorded"
+      }
+    },
+    {
+      "date": "2026-01-03",
+      "readiness": {
+        "status": "available",
+        "observation": {
+          "id": "obs_747cd6628eb6938a7a1e172fb5fb37ecd0245d7e15b5fa06a38bca113b35481b",
+          "metric": "oura.readiness_score",
+          "value": 85,
+          "unit": "score",
+          "source": {
+            "kind": "synthetic",
+            "channel": "fixture",
+            "datasetId": "strength_goal_good_recovery"
+          },
+          "effectiveDate": "2026-01-03",
+          "period": null,
+          "recordedAt": "2026-01-14T08:00:00+02:00",
+          "sourceRecordId": "oura.readiness_score-2026-01-03",
+          "sourceField": "oura.readiness_score",
+          "derivation": null
+        }
+      },
+      "lowestSleepHeartRate": {
+        "status": "missing",
+        "reason": "not_recorded"
+      }
+    },
+    {
+      "date": "2026-01-04",
+      "readiness": {
+        "status": "available",
+        "observation": {
+          "id": "obs_2bd3d819ad0fe02e8eb521352fab4eb0f12507c52cae350968dcf6cc593f7ab9",
+          "metric": "oura.readiness_score",
+          "value": 85,
+          "unit": "score",
+          "source": {
+            "kind": "synthetic",
+            "channel": "fixture",
+            "datasetId": "strength_goal_good_recovery"
+          },
+          "effectiveDate": "2026-01-04",
+          "period": null,
+          "recordedAt": "2026-01-14T08:00:00+02:00",
+          "sourceRecordId": "oura.readiness_score-2026-01-04",
+          "sourceField": "oura.readiness_score",
+          "derivation": null
+        }
+      },
+      "lowestSleepHeartRate": {
+        "status": "missing",
+        "reason": "not_recorded"
+      }
+    },
+    {
+      "date": "2026-01-05",
+      "readiness": {
+        "status": "available",
+        "observation": {
+          "id": "obs_1494861a954b49836bcb036625a68658a263e7595250167fc492fe5bc7598748",
+          "metric": "oura.readiness_score",
+          "value": 85,
+          "unit": "score",
+          "source": {
+            "kind": "synthetic",
+            "channel": "fixture",
+            "datasetId": "strength_goal_good_recovery"
+          },
+          "effectiveDate": "2026-01-05",
+          "period": null,
+          "recordedAt": "2026-01-14T08:00:00+02:00",
+          "sourceRecordId": "oura.readiness_score-2026-01-05",
+          "sourceField": "oura.readiness_score",
+          "derivation": null
+        }
+      },
+      "lowestSleepHeartRate": {
+        "status": "missing",
+        "reason": "not_recorded"
+      }
+    },
+    {
+      "date": "2026-01-06",
+      "readiness": {
+        "status": "available",
+        "observation": {
+          "id": "obs_93688b1723039289bd7285f1f7ecbf8079169f865ff79a7f55b3d625c5d71718",
+          "metric": "oura.readiness_score",
+          "value": 85,
+          "unit": "score",
+          "source": {
+            "kind": "synthetic",
+            "channel": "fixture",
+            "datasetId": "strength_goal_good_recovery"
+          },
+          "effectiveDate": "2026-01-06",
+          "period": null,
+          "recordedAt": "2026-01-14T08:00:00+02:00",
+          "sourceRecordId": "oura.readiness_score-2026-01-06",
+          "sourceField": "oura.readiness_score",
+          "derivation": null
+        }
+      },
+      "lowestSleepHeartRate": {
+        "status": "missing",
+        "reason": "not_recorded"
+      }
+    },
+    {
+      "date": "2026-01-07",
+      "readiness": {
+        "status": "available",
+        "observation": {
+          "id": "obs_cc894df91ccab4468a9203b5b66b44fc7cd80fdd291158fa20903f83422630b9",
+          "metric": "oura.readiness_score",
+          "value": 85,
+          "unit": "score",
+          "source": {
+            "kind": "synthetic",
+            "channel": "fixture",
+            "datasetId": "strength_goal_good_recovery"
+          },
+          "effectiveDate": "2026-01-07",
+          "period": null,
+          "recordedAt": "2026-01-14T08:00:00+02:00",
+          "sourceRecordId": "oura.readiness_score-2026-01-07",
+          "sourceField": "oura.readiness_score",
+          "derivation": null
+        }
+      },
+      "lowestSleepHeartRate": {
+        "status": "missing",
+        "reason": "not_recorded"
+      }
+    },
+    {
+      "date": "2026-01-08",
+      "readiness": {
+        "status": "available",
+        "observation": {
+          "id": "obs_6cf2369f52fe6474bdd21888f21e477cdb896335051a1baba6f7c3f7c8290c14",
+          "metric": "oura.readiness_score",
+          "value": 85,
+          "unit": "score",
+          "source": {
+            "kind": "synthetic",
+            "channel": "fixture",
+            "datasetId": "strength_goal_good_recovery"
+          },
+          "effectiveDate": "2026-01-08",
+          "period": null,
+          "recordedAt": "2026-01-14T08:00:00+02:00",
+          "sourceRecordId": "oura.readiness_score-2026-01-08",
+          "sourceField": "oura.readiness_score",
+          "derivation": null
+        }
+      },
+      "lowestSleepHeartRate": {
+        "status": "missing",
+        "reason": "not_recorded"
+      }
+    },
+    {
+      "date": "2026-01-09",
+      "readiness": {
+        "status": "available",
+        "observation": {
+          "id": "obs_549d5c27d1d5a869f14a243adfb8b747ff9820973308822511b9a5856dd00baf",
+          "metric": "oura.readiness_score",
+          "value": 85,
+          "unit": "score",
+          "source": {
+            "kind": "synthetic",
+            "channel": "fixture",
+            "datasetId": "strength_goal_good_recovery"
+          },
+          "effectiveDate": "2026-01-09",
+          "period": null,
+          "recordedAt": "2026-01-14T08:00:00+02:00",
+          "sourceRecordId": "oura.readiness_score-2026-01-09",
+          "sourceField": "oura.readiness_score",
+          "derivation": null
+        }
+      },
+      "lowestSleepHeartRate": {
+        "status": "missing",
+        "reason": "not_recorded"
+      }
+    },
+    {
+      "date": "2026-01-10",
+      "readiness": {
+        "status": "available",
+        "observation": {
+          "id": "obs_6ea0a634c13fbfd1b0025063679789c290aa0e9efa2046a3bc937062677816cb",
+          "metric": "oura.readiness_score",
+          "value": 85,
+          "unit": "score",
+          "source": {
+            "kind": "synthetic",
+            "channel": "fixture",
+            "datasetId": "strength_goal_good_recovery"
+          },
+          "effectiveDate": "2026-01-10",
+          "period": null,
+          "recordedAt": "2026-01-14T08:00:00+02:00",
+          "sourceRecordId": "oura.readiness_score-2026-01-10",
+          "sourceField": "oura.readiness_score",
+          "derivation": null
+        }
+      },
+      "lowestSleepHeartRate": {
+        "status": "missing",
+        "reason": "not_recorded"
+      }
+    },
+    {
+      "date": "2026-01-11",
+      "readiness": {
+        "status": "available",
+        "observation": {
+          "id": "obs_27dcb9143d2bc835eeb3b01a732b9fa51d9097ce85db47afff2a6dee46a19b8e",
+          "metric": "oura.readiness_score",
+          "value": 85,
+          "unit": "score",
+          "source": {
+            "kind": "synthetic",
+            "channel": "fixture",
+            "datasetId": "strength_goal_good_recovery"
+          },
+          "effectiveDate": "2026-01-11",
+          "period": null,
+          "recordedAt": "2026-01-14T08:00:00+02:00",
+          "sourceRecordId": "oura.readiness_score-2026-01-11",
+          "sourceField": "oura.readiness_score",
+          "derivation": null
+        }
+      },
+      "lowestSleepHeartRate": {
+        "status": "missing",
+        "reason": "not_recorded"
+      }
+    },
+    {
+      "date": "2026-01-12",
+      "readiness": {
+        "status": "available",
+        "observation": {
+          "id": "obs_b176bf4de4d05a2484486900f6c195e0b7a4397987c1206f89eb611113eab65e",
+          "metric": "oura.readiness_score",
+          "value": 85,
+          "unit": "score",
+          "source": {
+            "kind": "synthetic",
+            "channel": "fixture",
+            "datasetId": "strength_goal_good_recovery"
+          },
+          "effectiveDate": "2026-01-12",
+          "period": null,
+          "recordedAt": "2026-01-14T08:00:00+02:00",
+          "sourceRecordId": "oura.readiness_score-2026-01-12",
+          "sourceField": "oura.readiness_score",
+          "derivation": null
+        }
+      },
+      "lowestSleepHeartRate": {
+        "status": "missing",
+        "reason": "not_recorded"
+      }
+    },
+    {
+      "date": "2026-01-13",
+      "readiness": {
+        "status": "available",
+        "observation": {
+          "id": "obs_086e60d4b1aa80b8a46ff77d5740a4590a16424deefc5fb17714d0a00d387d58",
+          "metric": "oura.readiness_score",
+          "value": 85,
+          "unit": "score",
+          "source": {
+            "kind": "synthetic",
+            "channel": "fixture",
+            "datasetId": "strength_goal_good_recovery"
+          },
+          "effectiveDate": "2026-01-13",
+          "period": null,
+          "recordedAt": "2026-01-14T08:00:00+02:00",
+          "sourceRecordId": "oura.readiness_score-2026-01-13",
+          "sourceField": "oura.readiness_score",
+          "derivation": null
+        }
+      },
+      "lowestSleepHeartRate": {
+        "status": "missing",
+        "reason": "not_recorded"
+      }
+    },
+    {
+      "date": "2026-01-14",
+      "readiness": {
+        "status": "available",
+        "observation": {
+          "id": "obs_c99ca502435e6d986ea33b7edc6921c96e8ff80365bba2538c0af4ee53b7a7cd",
+          "metric": "oura.readiness_score",
+          "value": 85,
+          "unit": "score",
+          "source": {
+            "kind": "synthetic",
+            "channel": "fixture",
+            "datasetId": "strength_goal_good_recovery"
+          },
+          "effectiveDate": "2026-01-14",
+          "period": null,
+          "recordedAt": "2026-01-14T08:00:00+02:00",
+          "sourceRecordId": "oura.readiness_score-2026-01-14",
+          "sourceField": "oura.readiness_score",
+          "derivation": null
+        }
+      },
+      "lowestSleepHeartRate": {
+        "status": "missing",
+        "reason": "not_recorded"
+      }
+    }
+  ],
+  "training": [
+    {
+      "date": "2026-01-01",
+      "status": "complete",
+      "sessions": [],
+      "reason": null
+    },
+    {
+      "date": "2026-01-02",
+      "status": "complete",
+      "sessions": [],
+      "reason": null
+    },
+    {
+      "date": "2026-01-03",
+      "status": "complete",
+      "sessions": [],
+      "reason": null
+    },
+    {
+      "date": "2026-01-04",
+      "status": "complete",
+      "sessions": [],
+      "reason": null
+    },
+    {
+      "date": "2026-01-05",
+      "status": "complete",
+      "sessions": [],
+      "reason": null
+    },
+    {
+      "date": "2026-01-06",
+      "status": "complete",
+      "sessions": [],
+      "reason": null
+    },
+    {
+      "date": "2026-01-07",
+      "status": "complete",
+      "sessions": [],
+      "reason": null
+    },
+    {
+      "date": "2026-01-08",
+      "status": "complete",
+      "sessions": [],
+      "reason": null
+    },
+    {
+      "date": "2026-01-09",
+      "status": "complete",
+      "sessions": [],
+      "reason": null
+    },
+    {
+      "date": "2026-01-10",
+      "status": "complete",
+      "sessions": [],
+      "reason": null
+    },
+    {
+      "date": "2026-01-11",
+      "status": "complete",
+      "sessions": [],
+      "reason": null
+    },
+    {
+      "date": "2026-01-12",
+      "status": "complete",
+      "sessions": [],
+      "reason": null
+    },
+    {
+      "date": "2026-01-13",
+      "status": "complete",
+      "sessions": [],
+      "reason": null
+    },
+    {
+      "date": "2026-01-14",
+      "status": "complete",
+      "sessions": [],
+      "reason": null
+    }
+  ]
+}

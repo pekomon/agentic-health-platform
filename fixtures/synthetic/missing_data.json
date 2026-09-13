@@ -1,0 +1,362 @@
+{
+  "schemaVersion": 1,
+  "synthetic": true,
+  "scenarioId": "missing_data",
+  "clock": "2026-01-14T08:00:00+02:00",
+  "profile": {
+    "goal": "GENERAL_FITNESS",
+    "customGoal": null,
+    "allowedTrainingTypes": [
+      "WALKING",
+      "MOBILITY"
+    ]
+  },
+  "context": {
+    "localTime": "2026-01-14T08:00:00+02:00",
+    "timeZone": "Europe/Helsinki",
+    "bedtime": null,
+    "availableMinutes": 20
+  },
+  "sleep": [
+    {
+      "date": "2026-01-01",
+      "duration": {
+        "status": "missing",
+        "reason": "not_recorded"
+      }
+    },
+    {
+      "date": "2026-01-02",
+      "duration": {
+        "status": "missing",
+        "reason": "not_recorded"
+      }
+    },
+    {
+      "date": "2026-01-03",
+      "duration": {
+        "status": "missing",
+        "reason": "not_recorded"
+      }
+    },
+    {
+      "date": "2026-01-04",
+      "duration": {
+        "status": "missing",
+        "reason": "not_recorded"
+      }
+    },
+    {
+      "date": "2026-01-05",
+      "duration": {
+        "status": "missing",
+        "reason": "not_recorded"
+      }
+    },
+    {
+      "date": "2026-01-06",
+      "duration": {
+        "status": "missing",
+        "reason": "not_recorded"
+      }
+    },
+    {
+      "date": "2026-01-07",
+      "duration": {
+        "status": "missing",
+        "reason": "not_recorded"
+      }
+    },
+    {
+      "date": "2026-01-08",
+      "duration": {
+        "status": "missing",
+        "reason": "not_recorded"
+      }
+    },
+    {
+      "date": "2026-01-09",
+      "duration": {
+        "status": "missing",
+        "reason": "not_recorded"
+      }
+    },
+    {
+      "date": "2026-01-10",
+      "duration": {
+        "status": "missing",
+        "reason": "not_recorded"
+      }
+    },
+    {
+      "date": "2026-01-11",
+      "duration": {
+        "status": "missing",
+        "reason": "not_recorded"
+      }
+    },
+    {
+      "date": "2026-01-12",
+      "duration": {
+        "status": "missing",
+        "reason": "not_recorded"
+      }
+    },
+    {
+      "date": "2026-01-13",
+      "duration": {
+        "status": "missing",
+        "reason": "not_recorded"
+      }
+    },
+    {
+      "date": "2026-01-14",
+      "duration": {
+        "status": "missing",
+        "reason": "not_recorded"
+      }
+    }
+  ],
+  "recovery": [
+    {
+      "date": "2026-01-01",
+      "readiness": {
+        "status": "missing",
+        "reason": "not_recorded"
+      },
+      "lowestSleepHeartRate": {
+        "status": "missing",
+        "reason": "not_recorded"
+      }
+    },
+    {
+      "date": "2026-01-02",
+      "readiness": {
+        "status": "missing",
+        "reason": "not_recorded"
+      },
+      "lowestSleepHeartRate": {
+        "status": "missing",
+        "reason": "not_recorded"
+      }
+    },
+    {
+      "date": "2026-01-03",
+      "readiness": {
+        "status": "missing",
+        "reason": "not_recorded"
+      },
+      "lowestSleepHeartRate": {
+        "status": "missing",
+        "reason": "not_recorded"
+      }
+    },
+    {
+      "date": "2026-01-04",
+      "readiness": {
+        "status": "missing",
+        "reason": "not_recorded"
+      },
+      "lowestSleepHeartRate": {
+        "status": "missing",
+        "reason": "not_recorded"
+      }
+    },
+    {
+      "date": "2026-01-05",
+      "readiness": {
+        "status": "missing",
+        "reason": "not_recorded"
+      },
+      "lowestSleepHeartRate": {
+        "status": "missing",
+        "reason": "not_recorded"
+      }
+    },
+    {
+      "date": "2026-01-06",
+      "readiness": {
+        "status": "missing",
+        "reason": "not_recorded"
+      },
+      "lowestSleepHeartRate": {
+        "status": "missing",
+        "reason": "not_recorded"
+      }
+    },
+    {
+      "date": "2026-01-07",
+      "readiness": {
+        "status": "missing",
+        "reason": "not_recorded"
+      },
+      "lowestSleepHeartRate": {
+        "status": "missing",
+        "reason": "not_recorded"
+      }
+    },
+    {
+      "date": "2026-01-08",
+      "readiness": {
+        "status": "missing",
+        "reason": "not_recorded"
+      },
+      "lowestSleepHeartRate": {
+        "status": "missing",
+        "reason": "not_recorded"
+      }
+    },
+    {
+      "date": "2026-01-09",
+      "readiness": {
+        "status": "missing",
+        "reason": "not_recorded"
+      },
+      "lowestSleepHeartRate": {
+        "status": "missing",
+        "reason": "not_recorded"
+      }
+    },
+    {
+      "date": "2026-01-10",
+      "readiness": {
+        "status": "missing",
+        "reason": "not_recorded"
+      },
+      "lowestSleepHeartRate": {
+        "status": "missing",
+        "reason": "not_recorded"
+      }
+    },
+    {
+      "date": "2026-01-11",
+      "readiness": {
+        "status": "missing",
+        "reason": "not_recorded"
+      },
+      "lowestSleepHeartRate": {
+        "status": "missing",
+        "reason": "not_recorded"
+      }
+    },
+    {
+      "date": "2026-01-12",
+      "readiness": {
+        "status": "missing",
+        "reason": "not_recorded"
+      },
+      "lowestSleepHeartRate": {
+        "status": "missing",
+        "reason": "not_recorded"
+      }
+    },
+    {
+      "date": "2026-01-13",
+      "readiness": {
+        "status": "missing",
+        "reason": "not_recorded"
+      },
+      "lowestSleepHeartRate": {
+        "status": "missing",
+        "reason": "not_recorded"
+      }
+    },
+    {
+      "date": "2026-01-14",
+      "readiness": {
+        "status": "missing",
+        "reason": "not_recorded"
+      },
+      "lowestSleepHeartRate": {
+        "status": "missing",
+        "reason": "not_recorded"
+      }
+    }
+  ],
+  "training": [
+    {
+      "date": "2026-01-01",
+      "status": "unavailable",
+      "sessions": [],
+      "reason": "not_recorded"
+    },
+    {
+      "date": "2026-01-02",
+      "status": "unavailable",
+      "sessions": [],
+      "reason": "not_recorded"
+    },
+    {
+      "date": "2026-01-03",
+      "status": "unavailable",
+      "sessions": [],
+      "reason": "not_recorded"
+    },
+    {
+      "date": "2026-01-04",
+      "status": "unavailable",
+      "sessions": [],
+      "reason": "not_recorded"
+    },
+    {
+      "date": "2026-01-05",
+      "status": "unavailable",
+      "sessions": [],
+      "reason": "not_recorded"
+    },
+    {
+      "date": "2026-01-06",
+      "status": "unavailable",
+      "sessions": [],
+      "reason": "not_recorded"
+    },
+    {
+      "date": "2026-01-07",
+      "status": "unavailable",
+      "sessions": [],
+      "reason": "not_recorded"
+    },
+    {
+      "date": "2026-01-08",
+      "status": "unavailable",
+      "sessions": [],
+      "reason": "not_recorded"
+    },
+    {
+      "date": "2026-01-09",
+      "status": "unavailable",
+      "sessions": [],
+      "reason": "not_recorded"
+    },
+    {
+      "date": "2026-01-10",
+      "status": "unavailable",
+      "sessions": [],
+      "reason": "not_recorded"
+    },
+    {
+      "date": "2026-01-11",
+      "status": "unavailable",
+      "sessions": [],
+      "reason": "not_recorded"
+    },
+    {
+      "date": "2026-01-12",
+      "status": "unavailable",
+      "sessions": [],
+      "reason": "not_recorded"
+    },
+    {
+      "date": "2026-01-13",
+      "status": "unavailable",
+      "sessions": [],
+      "reason": "not_recorded"
+    },
+    {
+      "date": "2026-01-14",
+      "status": "unavailable",
+      "sessions": [],
+      "reason": "not_recorded"
+    }
+  ]
+}
