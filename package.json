@@ -9,11 +9,12 @@
     "npm": "12.0.2"
   },
   "workspaces": [
-    "packages/health-domain"
+    "packages/health-domain",
+    "packages/health-tools"
   ],
   "scripts": {
-    "build": "npm run build --workspace @ahp/health-domain",
-    "typecheck": "npm run typecheck --workspace @ahp/health-domain",
+    "build": "npm run build --workspaces",
+    "typecheck": "npm run typecheck --workspaces",
     "test": "vitest"
   },
   "devDependencies": {
