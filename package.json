@@ -16,7 +16,8 @@
   "scripts": {
     "build": "npm run build --workspaces",
     "typecheck": "npm run typecheck --workspaces",
-    "test": "vitest"
+    "test": "vitest",
+    "eval:synthetic": "node services/health-agent/dist/evals/run.js"
   },
   "devDependencies": {
     "@types/node": "24.13.3",

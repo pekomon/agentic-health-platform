@@ -24,4 +24,3 @@ export { createSyntheticHealthTools, expectedFixtureDates } from "./synthetic-re
 export { createHealthToolsServer } from "./server.js";
 export { connectHealthTools } from "./client.js";
 export type { DeliveredEvidenceListener, HealthToolsConnection } from "./client.js";
-
