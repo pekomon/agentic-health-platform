@@ -10,7 +10,8 @@
   },
   "workspaces": [
     "packages/health-domain",
-    "packages/health-tools"
+    "packages/health-tools",
+    "services/health-agent"
   ],
   "scripts": {
     "build": "npm run build --workspaces",
