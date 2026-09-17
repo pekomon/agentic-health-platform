@@ -10,6 +10,7 @@
   },
   "workspaces": [
     "packages/health-domain",
+    "packages/oura-client",
     "packages/health-tools",
     "services/health-agent"
   ],
