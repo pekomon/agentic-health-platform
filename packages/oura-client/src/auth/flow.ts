@@ -17,6 +17,7 @@ import type {
   AuthError,
   AuthStatus,
   OAuthProtocol,
+  OAuthRefreshProtocol,
   OAuthToken,
   OuraAuthConfig,
   Result,
@@ -140,6 +141,30 @@ export function createOuraOAuthProtocol(
   };
 }
 
+/** Refresh stays in the same reviewed OAuth client as code exchange. */
+export function createOuraRefreshProtocol(
+  config: { clientId: string; clientSecret: string },
+  tokenFetch: typeof fetch = fetch
+): OAuthRefreshProtocol {
+  return {
+    async refreshToken({ tokenSet, signal }): Promise<OAuthToken> {
+      const client = new OAuth2Client({
+        clientId: config.clientId,
+        clientSecret: config.clientSecret,
+        tokenEndpoint: OURA_TOKEN_ENDPOINT,
+        authenticationMethod: "client_secret_post",
+        fetch: tokenFetchBoundary(tokenFetch, signal)
+      });
+      const token = await client.refreshToken({
+        accessToken: tokenSet.accessToken,
+        refreshToken: tokenSet.refreshToken,
+        expiresAt: new Date(tokenSet.expiresAt).getTime()
+      });
+      return { accessToken: token.accessToken, refreshToken: token.refreshToken, expiresAt: token.expiresAt };
+    }
+  };
+}
+
 function validTokenSet(
   token: OAuthToken,
   now: number,
@@ -179,11 +204,13 @@ type BoundedResult<T> =
 function runBounded<T>(
   operation: (signal: AbortSignal) => Promise<T>,
   externalSignal: AbortSignal | undefined,
-  timeoutMs: number
+  timeoutMs: number,
+  awaitAbortSettlement = false
 ): Promise<BoundedResult<T>> {
   return new Promise((resolve) => {
     const controller = new AbortController();
     let settled = false;
+    let abortResult: Extract<BoundedResult<T>, { kind: "cancelled" | "timeout" }> | undefined;
     let timeout: ReturnType<typeof setTimeout> | undefined;
     const finish = (result: BoundedResult<T>): void => {
       if (settled) return;
@@ -193,17 +220,26 @@ function runBounded<T>(
       if (result.kind === "cancelled" || result.kind === "timeout") controller.abort();
       resolve(result);
     };
-    const onAbort = (): void => finish({ kind: "cancelled" });
+    const abort = (result: Extract<BoundedResult<T>, { kind: "cancelled" | "timeout" }>): void => {
+      if (settled) return;
+      if (!awaitAbortSettlement) return finish(result);
+      abortResult = result;
+      controller.abort();
+    };
+    const onAbort = (): void => abort({ kind: "cancelled" });
     if (externalSignal?.aborted) {
-      onAbort();
+      // No sink has started in this branch, so there is nothing durable to
+      // await before returning cancellation.
+      if (awaitAbortSettlement) finish({ kind: "cancelled" });
+      else onAbort();
       return;
     }
     externalSignal?.addEventListener("abort", onAbort, { once: true });
-    timeout = setTimeout(() => finish({ kind: "timeout" }), timeoutMs);
+    timeout = setTimeout(() => abort({ kind: "timeout" }), timeoutMs);
     try {
       operation(controller.signal).then(
-        (value) => finish({ kind: "success", value }),
-        (error: unknown) => finish({ kind: "failed", error })
+        (value) => finish(abortResult ?? { kind: "success", value }),
+        (error: unknown) => finish(abortResult ?? { kind: "failed", error })
       );
     } catch (error) {
       finish({ kind: "failed", error });
@@ -334,7 +370,8 @@ export async function login(
     const persistence = await runBounded(
       (signal) => dependencies.tokenSink.write(tokenSet, signal),
       dependencies.signal,
-      dependencies.postCallbackTimeoutMs ?? POST_CALLBACK_TIMEOUT_MS
+      dependencies.postCallbackTimeoutMs ?? POST_CALLBACK_TIMEOUT_MS,
+      true
     );
     if (persistence.kind === "cancelled") {
       return { ok: false, error: authError("CANCELLED") };

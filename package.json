@@ -11,6 +11,7 @@
   "workspaces": [
     "packages/health-domain",
     "packages/oura-client",
+    "apps/cli",
     "packages/health-tools",
     "services/health-agent"
   ],

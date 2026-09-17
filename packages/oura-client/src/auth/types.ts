@@ -53,6 +53,21 @@ export type OAuthProtocol = {
   exchangeCode(input: { code: string; redirectUri: string; signal?: AbortSignal }): Promise<OAuthToken>;
 };
 
+export type OAuthRefreshProtocol = {
+  refreshToken(input: {
+    tokenSet: TokenSet;
+    signal?: AbortSignal;
+  }): Promise<OAuthToken>;
+};
+
+export type SessionError =
+  | { code: "CONFIG_INVALID"; retryable: false }
+  | { code: "CREDENTIAL_STORE_UNAVAILABLE"; retryable: false }
+  | { code: "AUTH_BUSY"; retryable: true }
+  | { code: "UNAUTHENTICATED"; retryable: false }
+  | { code: "REAUTH_REQUIRED"; retryable: false }
+  | { code: "CANCELLED"; retryable: true };
+
 export type AuthDependencies = {
   openBrowser(url: string): Promise<void> | void;
   randomBytes(size: number): Uint8Array;

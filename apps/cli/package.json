@@ -1,0 +1,12 @@
+{
+  "name": "@ahp/cli",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "bin": { "health": "./dist/main.js" },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": { "@ahp/oura-client": "0.0.0" }
+}
