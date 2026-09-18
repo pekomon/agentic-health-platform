@@ -1,0 +1,56 @@
+# G1 — Live Oura REST Use Approval
+
+Date: 2026-09-18
+
+Status: APPROVED
+
+## Scope
+
+This approval covers:
+
+- live Oura OAuth acceptance
+- local Oura REST use
+- OAuth scopes `daily` and `workout`
+- Slice 5 live authentication acceptance
+- later Slice 7 local REST inspection within the same approved boundaries
+
+It does not approve Oura REST data for external AI or LLM processing.
+
+## Reviewed
+
+The project owner confirmed:
+
+- the registered Oura application purpose matches the current project
+- the registered callback URI matches the production OAuth implementation
+- only `daily` and `workout` scopes are enabled and requested
+- the current implementation has no Oura REST-to-agent or REST-to-OpenAI path
+- the published privacy policy reflects the current implementation
+- local logout and provider-side revocation semantics are documented
+- current consent, local processing, retention, and deletion behavior were
+  reviewed
+
+## Oura agreement
+
+The Oura API and MCP Agreement was rechecked on 2026-09-18.
+
+The effective version remains June 8, 2026, matching the version used during
+the project's architecture review.
+
+The project continues to enforce the architectural restriction that Oura user
+data obtained through the REST API must not be provided to an external LLM or
+AI platform.
+
+Live Oura AI integration remains separately gated by G2/G3 and is not approved
+by this record.
+
+## Data recorded
+
+This approval record contains no:
+
+- Oura user data
+- OAuth authorization codes
+- access tokens
+- refresh tokens
+- client secrets
+- personal health information
+
