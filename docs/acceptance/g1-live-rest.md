@@ -59,7 +59,9 @@ by this record.
 This approval record contains no:
 
 - Oura user data
+- authorization URLs
 - OAuth authorization codes
+- OAuth state values
 - access tokens
 - refresh tokens
 - client secrets
@@ -76,6 +78,7 @@ This approval record contains no:
 - Status: PASS
 - Granted scopes: unknown
 - Refresh: PENDING (token was outside the production refresh window)
+- Refresh request: not made
 - Logout: PASS
 - Fresh-process final status: FAIL (`REAUTH_REQUIRED`)
 
@@ -90,12 +93,15 @@ This approval record contains no:
 - Status: PASS
 - Granted scopes: unknown
 - Refresh: PENDING (token was outside the production refresh window)
+- Refresh request: not made
 - Logout: PASS
 - Fresh-process final status: PASS (`unauthenticated`)
 - Post-logout native Keychain absence result: `null`
 
-The login result was already `unknown` before a subsequent Keychain read, and
-the same state was subsequently read from the store. No requested-scope
-fallback was applied. This is inconsistent with the current Oura documentation,
-which states that a successful authorization-code redirect includes `scope`.
+The accepted provider callback supplied no usable scope value during the
+observed run: the login result was already `unknown` before a subsequent
+Keychain read, and the same state was subsequently read from the store. No
+requested-scope fallback was applied. This is inconsistent with the current
+Oura documentation, which states that a successful authorization-code redirect
+includes `scope`.
 No Oura health-data endpoint was called during either run.
