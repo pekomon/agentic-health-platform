@@ -29,6 +29,17 @@ The project owner confirmed:
 - current consent, local processing, retention, and deletion behavior were
   reviewed
 
+## Registered OAuth callbacks
+
+The registered Oura application callbacks reviewed for G1 are:
+
+- `http://localhost:3000/oauth/callback`
+- `http://localhost:8788/callback`
+
+The live acceptance run may use either registered callback, provided the
+runtime `OURA_REDIRECT_URI` exactly matches one of these values.
+
+
 ## Oura agreement
 
 The Oura API and MCP Agreement was rechecked on 2026-09-18.
