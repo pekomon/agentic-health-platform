@@ -65,3 +65,37 @@ This approval record contains no:
 - client secrets
 - personal health information
 
+## Slice 5 live-auth acceptance history
+
+### Initial run — 2026-09-18 (before Keychain adapter fix)
+
+- Baseline commit: `703ab813f4ce55c25a204b76b2fbdaa371858f0b`
+- Adapter/library versions: `@napi-rs/keyring` 2.1.0;
+  `@badgateway/oauth2-client` 3.3.1
+- Login: PASS
+- Status: PASS
+- Granted scopes: unknown
+- Refresh: PENDING (token was outside the production refresh window)
+- Logout: PASS
+- Fresh-process final status: FAIL (`REAUTH_REQUIRED`)
+
+### Rerun — 2026-09-18 (uncommitted Keychain adapter fix)
+
+- Baseline commit: `703ab813f4ce55c25a204b76b2fbdaa371858f0b`
+- Adapter/library versions: `@napi-rs/keyring` 2.1.0;
+  `@badgateway/oauth2-client` 3.3.1
+- Runtime callback registration check: PASS
+- Requested scopes: `daily`, `workout`
+- Login: PASS
+- Status: PASS
+- Granted scopes: unknown
+- Refresh: PENDING (token was outside the production refresh window)
+- Logout: PASS
+- Fresh-process final status: PASS (`unauthenticated`)
+- Post-logout native Keychain absence result: `null`
+
+The login result was already `unknown` before a subsequent Keychain read, and
+the same state was subsequently read from the store. No requested-scope
+fallback was applied. This is inconsistent with the current Oura documentation,
+which states that a successful authorization-code redirect includes `scope`.
+No Oura health-data endpoint was called during either run.

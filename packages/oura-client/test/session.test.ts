@@ -161,14 +161,17 @@ describe("OuraSession", () => {
 });
 
 describe("Keychain token store", () => {
-  it("uses one sanitized Keychain item and treats denial and unsupported platforms as unavailable", async () => {
-    let persisted: string | undefined;
-    const entry: KeychainEntry = { getPassword: async () => persisted, setPassword: async (value) => { persisted = value; }, deleteCredential: async () => { persisted = undefined; return true; } };
+  it("uses one sanitized Keychain item, accepts the native null absence form, and treats denial and unsupported platforms as unavailable", async () => {
+    let persisted: string | null | undefined;
+    const entry: KeychainEntry = { getPassword: async () => persisted, setPassword: async (value) => { persisted = value; }, deleteCredential: async () => { persisted = null; return true; } };
     const store = await createMacOSKeychainTokenStore("client-id", { platform: "darwin", createEntry: (_service, account) => {
       expect(account).toBe(createHash("sha256").update("client-id").digest("hex")); expect(account).not.toContain("client-id"); return entry;
     } });
     await store.write(token(now + 3_600_000)); expect(persisted).toContain("canary-access-token");
     await expect(store.read()).resolves.toMatchObject({ version: 1 }); await store.clear(); await expect(store.read()).resolves.toBeNull();
+    await expect(new OuraSession(config, { store, lock: availableLock }).getStatus()).resolves.toEqual({
+      ok: true, value: { state: "unauthenticated", expiresAt: null, grantedScopes: null }
+    });
     const denied = new MacOSKeychainTokenStore({ ...entry, getPassword: async () => { throw new Error("canary Keychain diagnostic"); } });
     await expect(denied.read()).rejects.toBeInstanceOf(CredentialStoreUnavailableError);
     const writeDenied = new MacOSKeychainTokenStore({ ...entry, setPassword: async () => { throw new Error("canary Keychain diagnostic"); } });
@@ -177,6 +180,12 @@ describe("Keychain token store", () => {
     await expect(deleteDenied.clear()).rejects.toBeInstanceOf(CredentialStoreUnavailableError);
     const malformed = new MacOSKeychainTokenStore({ ...entry, getPassword: async () => "{not json" });
     await expect(malformed.read()).rejects.toBeInstanceOf(MalformedTokenSetError);
+    const undeleted = new MacOSKeychainTokenStore({
+      ...entry,
+      getPassword: async () => JSON.stringify(token(now + 3_600_000)),
+      deleteCredential: async () => true
+    });
+    await expect(undeleted.clear()).rejects.toBeInstanceOf(CredentialStoreUnavailableError);
     let sawAbortSignal = false;
     const cancellation = new MacOSKeychainTokenStore({ ...entry, setPassword: async (_value, signal) => new Promise<void>((_resolve, reject) => {
       sawAbortSignal = signal !== undefined;

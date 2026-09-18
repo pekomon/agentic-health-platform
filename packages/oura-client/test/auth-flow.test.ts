@@ -171,6 +171,27 @@ describe("isolated authorization-code login", () => {
     await expectPortAvailable(port);
   });
 
+  it("preserves an absent callback scope as unknown instead of substituting requested scopes", async () => {
+    const port = await unusedPort();
+    let opened: (() => void) | undefined;
+    const openStarted = new Promise<void>((resolve) => { opened = resolve; });
+    const writes: TokenSet[] = [];
+    const pending = login({ clientId: "client", clientSecret: secretCanary, redirectUri: `http://127.0.0.1:${port}/callback` }, dependencies({
+      openBrowser: () => opened?.(),
+      protocol: protocol(),
+      tokenSink: { write: async (value) => { writes.push(value); } }
+    }));
+    await openStarted;
+    await sendCallback(port, `/callback?code=one-time-code&state=${state}`);
+    await expect(pending).resolves.toEqual({
+      ok: true,
+      value: { state: "authenticated", expiresAt: new Date(now + 60_000).toISOString(), grantedScopes: null }
+    });
+    expect(writes).toHaveLength(1);
+    expect(writes[0]?.grantedScopes).toBeNull();
+    await expectPortAvailable(port);
+  });
+
   it("does not exchange a rejected callback and accepts a valid denial only after state validation", async () => {
     const port = await unusedPort();
     let exchanges = 0;

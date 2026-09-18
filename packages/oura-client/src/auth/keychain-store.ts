@@ -6,7 +6,11 @@ import type { TokenSet } from "./types.js";
 const SERVICE = "agentic-health-platform.oura";
 
 export type KeychainEntry = {
-  getPassword(signal?: AbortSignal): Promise<string | undefined>;
+  /**
+   * The pinned native adapter declares `undefined` for an absent credential,
+   * but its macOS boundary may return `null`. Both mean no credential exists.
+   */
+  getPassword(signal?: AbortSignal): Promise<string | null | undefined>;
   setPassword(value: string, signal?: AbortSignal): Promise<void>;
   deleteCredential(signal?: AbortSignal): Promise<boolean>;
 };
@@ -21,7 +25,7 @@ export class MacOSKeychainTokenStore implements TokenStore {
   async read(): Promise<TokenSet | null> {
     try {
       const value = await this.entry.getPassword();
-      return value === undefined ? null : parseTokenSet(JSON.parse(value) as unknown);
+      return value == null ? null : parseTokenSet(JSON.parse(value) as unknown);
     } catch (error) {
       if (error instanceof MalformedTokenSetError || (error instanceof Error && error.name === "SyntaxError")) {
         throw new MalformedTokenSetError();
@@ -37,8 +41,12 @@ export class MacOSKeychainTokenStore implements TokenStore {
   }
 
   async clear(): Promise<void> {
-    try { await this.entry.deleteCredential(); }
-    catch { throw new CredentialStoreUnavailableError(); }
+    try {
+      await this.entry.deleteCredential();
+      // A reported deletion is not enough: a fresh read must observe absence
+      // before session logout can claim success.
+      if ((await this.entry.getPassword()) != null) throw new CredentialStoreUnavailableError();
+    } catch { throw new CredentialStoreUnavailableError(); }
   }
 }
 
