@@ -6,7 +6,7 @@ export type OuraResponseMetadata = {
   /** The time at which the response was generated */
   timestamp: OuraTimestamp;
   /** A token used to fetch the next page of results, or null if this is the last page */
-  nextToken?: OuraPaginationToken;
+  nextToken?: OuraPaginationToken | null;
 };
 
 export type OuraSleepItem = {
