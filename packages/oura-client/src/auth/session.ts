@@ -178,6 +178,86 @@ export class OuraSession {
     this.reauthRequired = true;
     await this.dependencies.store.clear().catch(() => undefined);
   }
+
+  /**
+   * For handling the case when a token is rejected with HTTP 401.
+   * The original token that was rejected should be passed in as `rejectedAccessToken`.
+   * This method performs a force refresh to get a new valid token for subsequent requests.
+   * While it may perform multiple refreshes, concurrency is handled properly:
+   * - Multiple simultaneous calls from different request threads will result in only
+   *   one refresh at a time via the lock
+   * - If another call has already refreshed it, we return what that caller got
+   * - Repeated 401s against token X will not cause duplicate refreshes for token X
+   */
+  async refreshAfterUnauthorized(rejectedAccessToken: string): Promise<Result<string, SessionError>> {
+    // This method needs to be narrowly scoped to avoid any nested lock acquisition
+
+    // First get the current access token 
+    const currentResult = await this.withAccessToken(async (token) => token);
+    if (!currentResult.ok) {
+      return currentResult;
+    }
+    
+    const currentToken = currentResult.value;
+    
+    // If the rejected token is not the same as our current token, 
+    // the 401 was against an old token that has already been rotated
+    if (currentToken !== rejectedAccessToken) {
+      // Another caller has already refreshed this token, so we return what they got
+      return { ok: true, value: currentToken };
+    }
+
+    // The token we're trying to refresh is the same as the one rejected.
+    // We have to get the new valid access token.
+    
+    // Try to refresh the token directly - there's no point in creating an explicit
+    // refresh method and then calling it because we want the session to handle this properly
+    
+    // Note: Our approach below would cause problems as we're already within session
+    // boundary, so the existing refresh mechanism works best.  
+    // For now, let's provide a simplified version that works with the existing codebase
+    
+    // The proper behavior per specification is:
+    // 1. Get an auth lock (to make sure no other concurrent refreshes happen)
+    // 2. Read the current tokens
+    // 3. If the current token matches rejectedToken, we need to actually refresh  
+    // 4. Otherwise, return what's already been refreshed
+    
+    if (!this.configValid) {
+      return { ok: false, error: error("CONFIG_INVALID") };
+    }
+    
+    const lock = await this.dependencies.lock.acquire();
+    if (lock === null) {
+      return { ok: false, error: error("AUTH_BUSY") };
+    }
+    
+    try {
+      // Read the tokens under lock
+      const storedTokens = await this.dependencies.store.read();
+      if (!storedTokens) {
+        this.reauthRequired = true;
+        return { ok: false, error: error("UNAUTHENTICATED") };
+      }
+      
+      // Check if the token has already been refreshed by another process
+      if (storedTokens.accessToken !== rejectedAccessToken) {
+        // Someone already refreshed our token; return that new token
+        return { ok: true, value: storedTokens.accessToken };
+      }
+      
+      // Now we're in the case where we actually need to refresh the token
+      const refreshTokenResult = await this.refresh(storedTokens);
+      
+      if (!refreshTokenResult.ok) {
+        return refreshTokenResult;
+      }
+      
+      return { ok: true, value: refreshTokenResult.value.accessToken };
+    } finally {
+      lock.release();
+    }
+  }
 }
 
 export { REFRESH_SKEW_MS };
