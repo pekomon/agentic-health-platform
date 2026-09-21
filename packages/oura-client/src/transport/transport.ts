@@ -52,7 +52,7 @@ export class OuraRestTransport {
           pageResults.push(result.value);
           
           // Check for pagination token
-          paginationToken = result.value.page.nextToken;
+          paginationToken = result.value.page.nextToken ?? null;
           pageCount++;
           
           // Stop when there is no more next token
@@ -189,7 +189,7 @@ export class OuraRestTransport {
           pageResults.push(result.value);
           
           // Check for pagination token
-          paginationToken = result.value.page.nextToken;
+          paginationToken = result.value.page.nextToken ?? null;
           pageCount++;
           
           // Stop when there is no more next token
@@ -326,7 +326,7 @@ export class OuraRestTransport {
           pageResults.push(result.value);
           
           // Check for pagination token
-          paginationToken = result.value.page.nextToken;
+          paginationToken = result.value.page.nextToken ?? null;
           pageCount++;
           
           // Stop when there is no more next token
