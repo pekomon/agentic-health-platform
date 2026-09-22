@@ -70,6 +70,7 @@ function boundedRefresh(
 
 export class OuraSession {
   private refreshInFlight: Promise<Result<TokenSet, SessionError>> | null = null;
+  private readonly unauthorizedRefreshes = new Map<string, Promise<Result<string, SessionError>>>();
   /** A rotating refresh may have consumed the old token even if clearing fails. */
   private reauthRequired = false;
   private readonly now: () => number;
@@ -149,6 +150,12 @@ export class OuraSession {
       const currentExpiry = safeDateMilliseconds(current.expiresAt);
       if (currentExpiry === null) return { ok: false, error: error("REAUTH_REQUIRED") };
       if (currentExpiry > this.now() + REFRESH_SKEW_MS) return { ok: true, value: current };
+      return this.refreshWhileHoldingLock(current);
+    } finally { await lock.release().catch(() => undefined); }
+  }
+
+  /** Must only be called by a caller that already owns the auth lock. */
+  private async refreshWhileHoldingLock(current: TokenSet): Promise<Result<TokenSet, SessionError>> {
       const refreshed = await boundedRefresh(this.refresher, current, this.dependencies.signal);
       if (refreshed.kind === "cancelled") {
         await this.clearAfterRefreshFailure();
@@ -171,12 +178,51 @@ export class OuraSession {
       try { await this.dependencies.store.write(next); }
       catch { await this.clearAfterRefreshFailure(); return { ok: false, error: error("REAUTH_REQUIRED") }; }
       return { ok: true, value: next };
-    } finally { await lock.release().catch(() => undefined); }
   }
 
   private async clearAfterRefreshFailure(): Promise<void> {
     this.reauthRequired = true;
     await this.dependencies.store.clear().catch(() => undefined);
+  }
+
+  /**
+   * For handling the case when a token is rejected with HTTP 401.
+   * The original token that was rejected should be passed in as `rejectedAccessToken`.
+   * This method performs a force refresh to get a new valid token for subsequent requests.
+   * While it may perform multiple refreshes, concurrency is handled properly:
+   * - Multiple simultaneous calls from different request threads will result in only
+   *   one refresh at a time via the lock
+   * - If another call has already refreshed it, we return what that caller got
+   * - Repeated 401s against token X will not cause duplicate refreshes for token X
+   */
+  async refreshAfterUnauthorized(rejectedAccessToken: string): Promise<Result<string, SessionError>> {
+    if (!this.configValid) return { ok: false, error: error("CONFIG_INVALID") };
+    if (this.dependencies.signal?.aborted) return { ok: false, error: error("CANCELLED") };
+    const existing = this.unauthorizedRefreshes.get(rejectedAccessToken);
+    if (existing !== undefined) return existing;
+    const operation = this.forceRefreshAfterUnauthorized(rejectedAccessToken).finally(() => {
+      this.unauthorizedRefreshes.delete(rejectedAccessToken);
+    });
+    this.unauthorizedRefreshes.set(rejectedAccessToken, operation);
+    return operation;
+  }
+
+  private async forceRefreshAfterUnauthorized(rejectedAccessToken: string): Promise<Result<string, SessionError>> {
+    if (this.reauthRequired) return { ok: false, error: error("REAUTH_REQUIRED") };
+    let lock: AuthLock | null;
+    try { lock = await this.dependencies.lock.acquire(); }
+    catch { return { ok: false, error: error("CREDENTIAL_STORE_UNAVAILABLE") }; }
+    if (lock === null) return { ok: false, error: error("AUTH_BUSY") };
+    try {
+      if (this.dependencies.signal?.aborted) return { ok: false, error: error("CANCELLED") };
+      let current: TokenSet | null;
+      try { current = await this.dependencies.store.read(); }
+      catch (cause) { return { ok: false, error: error(cause instanceof MalformedTokenSetError ? "REAUTH_REQUIRED" : "CREDENTIAL_STORE_UNAVAILABLE") }; }
+      if (current === null) return { ok: false, error: error("UNAUTHENTICATED") };
+      if (current.accessToken !== rejectedAccessToken) return { ok: true, value: current.accessToken };
+      const refreshed = await this.refreshWhileHoldingLock(current);
+      return refreshed.ok ? { ok: true, value: refreshed.value.accessToken } : refreshed;
+    } finally { await lock.release().catch(() => undefined); }
   }
 }
 

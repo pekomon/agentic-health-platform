@@ -46,6 +46,19 @@ const refresher = (value: Partial<{ accessToken: unknown; refreshToken: unknown;
 });
 
 describe("OuraSession", () => {
+  it("force-refreshes a locally valid rejected token once without nested lock acquisition", async () => {
+    const store = new MemoryStore(token(now + 3_600_000)); let acquires = 0; let refreshes = 0;
+    const session = new OuraSession(config, { store, now: () => now, lock: { acquire: async () => { acquires++; return { release: async () => undefined }; } }, refresher: { refreshToken: async () => { refreshes++; return { accessToken: "forced-next", refreshToken: "next-refresh", expiresAt: now + 3_600_000 }; } } });
+    await expect(Promise.all([session.refreshAfterUnauthorized("canary-access-token"), session.refreshAfterUnauthorized("canary-access-token")])).resolves.toEqual([{ ok: true, value: "forced-next" }, { ok: true, value: "forced-next" }]);
+    expect(refreshes).toBe(1); expect(acquires).toBe(1); expect(store.value?.accessToken).toBe("forced-next");
+  });
+
+  it("uses the newer persisted token after acquiring the lock", async () => {
+    const store = new MemoryStore(token(now + 3_600_000)); let refreshes = 0;
+    const session = new OuraSession(config, { store, now: () => now, lock: { acquire: async () => { store.value = { ...store.value!, accessToken: "other-process-token" }; return { release: async () => undefined }; } }, refresher: { refreshToken: async () => { refreshes++; throw new Error("must not refresh"); } } });
+    await expect(session.refreshAfterUnauthorized("canary-access-token")).resolves.toEqual({ ok: true, value: "other-process-token" }); expect(refreshes).toBe(0);
+  });
+
   it("persists rotation across session instances, preserves grants, and never refreshes status", async () => {
     const store = new MemoryStore(token());
     const first = new OuraSession(config, { store, lock: availableLock, now: () => now, refresher: refresher() });
