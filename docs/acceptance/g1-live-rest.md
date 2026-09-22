@@ -105,3 +105,25 @@ requested-scope fallback was applied. This is inconsistent with the current
 Oura documentation, which states that a successful authorization-code redirect
 includes `scope`.
 No Oura health-data endpoint was called during either run.
+
+## Slice 7 local REST inspection — 2026-09-22
+
+- Baseline commit: `bb2455857cbf2ae707343e44f3d3ea0800803da8`
+- Window: 14 calendar days, within the transport contract limit
+- Local OAuth login: PASS
+- Stored-session status: PASS (authenticated; granted scopes remained unknown
+  because the provider callback did not include a usable scope value)
+- Bounded sleep collection: PASS (complete; no transport failure or projected
+  field issues)
+- Bounded readiness collection: PASS (complete; no transport failure or
+  projected field issues)
+- Bounded workout collection: PASS (complete; no transport failure or
+  projected field issues)
+- First inspection attempt: locally rejected as `INVALID_REQUEST` because its
+  inclusive date range contained 15 days; no provider request was made in that
+  attempt. The corrected 14-day attempt passed.
+
+The inspection emitted only aggregate acceptance metadata. No Oura observation
+values, record identifiers, authorization values, tokens, client secrets, or
+raw response payloads were logged or recorded. Oura REST data was not sent to
+an external AI or LLM.
