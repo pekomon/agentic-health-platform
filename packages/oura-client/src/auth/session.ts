@@ -70,6 +70,7 @@ function boundedRefresh(
 
 export class OuraSession {
   private refreshInFlight: Promise<Result<TokenSet, SessionError>> | null = null;
+  private readonly unauthorizedRefreshes = new Map<string, Promise<Result<string, SessionError>>>();
   /** A rotating refresh may have consumed the old token even if clearing fails. */
   private reauthRequired = false;
   private readonly now: () => number;
@@ -149,6 +150,12 @@ export class OuraSession {
       const currentExpiry = safeDateMilliseconds(current.expiresAt);
       if (currentExpiry === null) return { ok: false, error: error("REAUTH_REQUIRED") };
       if (currentExpiry > this.now() + REFRESH_SKEW_MS) return { ok: true, value: current };
+      return this.refreshWhileHoldingLock(current);
+    } finally { await lock.release().catch(() => undefined); }
+  }
+
+  /** Must only be called by a caller that already owns the auth lock. */
+  private async refreshWhileHoldingLock(current: TokenSet): Promise<Result<TokenSet, SessionError>> {
       const refreshed = await boundedRefresh(this.refresher, current, this.dependencies.signal);
       if (refreshed.kind === "cancelled") {
         await this.clearAfterRefreshFailure();
@@ -171,7 +178,6 @@ export class OuraSession {
       try { await this.dependencies.store.write(next); }
       catch { await this.clearAfterRefreshFailure(); return { ok: false, error: error("REAUTH_REQUIRED") }; }
       return { ok: true, value: next };
-    } finally { await lock.release().catch(() => undefined); }
   }
 
   private async clearAfterRefreshFailure(): Promise<void> {
@@ -190,73 +196,33 @@ export class OuraSession {
    * - Repeated 401s against token X will not cause duplicate refreshes for token X
    */
   async refreshAfterUnauthorized(rejectedAccessToken: string): Promise<Result<string, SessionError>> {
-    // This method needs to be narrowly scoped to avoid any nested lock acquisition
+    if (!this.configValid) return { ok: false, error: error("CONFIG_INVALID") };
+    if (this.dependencies.signal?.aborted) return { ok: false, error: error("CANCELLED") };
+    const existing = this.unauthorizedRefreshes.get(rejectedAccessToken);
+    if (existing !== undefined) return existing;
+    const operation = this.forceRefreshAfterUnauthorized(rejectedAccessToken).finally(() => {
+      this.unauthorizedRefreshes.delete(rejectedAccessToken);
+    });
+    this.unauthorizedRefreshes.set(rejectedAccessToken, operation);
+    return operation;
+  }
 
-    // First get the current access token 
-    const currentResult = await this.withAccessToken(async (token) => token);
-    if (!currentResult.ok) {
-      return currentResult;
-    }
-    
-    const currentToken = currentResult.value;
-    
-    // If the rejected token is not the same as our current token, 
-    // the 401 was against an old token that has already been rotated
-    if (currentToken !== rejectedAccessToken) {
-      // Another caller has already refreshed this token, so we return what they got
-      return { ok: true, value: currentToken };
-    }
-
-    // The token we're trying to refresh is the same as the one rejected.
-    // We have to get the new valid access token.
-    
-    // Try to refresh the token directly - there's no point in creating an explicit
-    // refresh method and then calling it because we want the session to handle this properly
-    
-    // Note: Our approach below would cause problems as we're already within session
-    // boundary, so the existing refresh mechanism works best.  
-    // For now, let's provide a simplified version that works with the existing codebase
-    
-    // The proper behavior per specification is:
-    // 1. Get an auth lock (to make sure no other concurrent refreshes happen)
-    // 2. Read the current tokens
-    // 3. If the current token matches rejectedToken, we need to actually refresh  
-    // 4. Otherwise, return what's already been refreshed
-    
-    if (!this.configValid) {
-      return { ok: false, error: error("CONFIG_INVALID") };
-    }
-    
-    const lock = await this.dependencies.lock.acquire();
-    if (lock === null) {
-      return { ok: false, error: error("AUTH_BUSY") };
-    }
-    
+  private async forceRefreshAfterUnauthorized(rejectedAccessToken: string): Promise<Result<string, SessionError>> {
+    if (this.reauthRequired) return { ok: false, error: error("REAUTH_REQUIRED") };
+    let lock: AuthLock | null;
+    try { lock = await this.dependencies.lock.acquire(); }
+    catch { return { ok: false, error: error("CREDENTIAL_STORE_UNAVAILABLE") }; }
+    if (lock === null) return { ok: false, error: error("AUTH_BUSY") };
     try {
-      // Read the tokens under lock
-      const storedTokens = await this.dependencies.store.read();
-      if (!storedTokens) {
-        this.reauthRequired = true;
-        return { ok: false, error: error("UNAUTHENTICATED") };
-      }
-      
-      // Check if the token has already been refreshed by another process
-      if (storedTokens.accessToken !== rejectedAccessToken) {
-        // Someone already refreshed our token; return that new token
-        return { ok: true, value: storedTokens.accessToken };
-      }
-      
-      // Now we're in the case where we actually need to refresh the token
-      const refreshTokenResult = await this.refresh(storedTokens);
-      
-      if (!refreshTokenResult.ok) {
-        return refreshTokenResult;
-      }
-      
-      return { ok: true, value: refreshTokenResult.value.accessToken };
-    } finally {
-      lock.release();
-    }
+      if (this.dependencies.signal?.aborted) return { ok: false, error: error("CANCELLED") };
+      let current: TokenSet | null;
+      try { current = await this.dependencies.store.read(); }
+      catch (cause) { return { ok: false, error: error(cause instanceof MalformedTokenSetError ? "REAUTH_REQUIRED" : "CREDENTIAL_STORE_UNAVAILABLE") }; }
+      if (current === null) return { ok: false, error: error("UNAUTHENTICATED") };
+      if (current.accessToken !== rejectedAccessToken) return { ok: true, value: current.accessToken };
+      const refreshed = await this.refreshWhileHoldingLock(current);
+      return refreshed.ok ? { ok: true, value: refreshed.value.accessToken } : refreshed;
+    } finally { await lock.release().catch(() => undefined); }
   }
 }
 

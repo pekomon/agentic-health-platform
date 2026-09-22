@@ -1,12 +1,10 @@
 export { OuraRestTransport } from "./transport.js";
 export type {
-  OuraClientError,
-  ListSleepResponse,
-  ListReadinessResponse,
-  ListWorkoutsResponse,
-  OuraSleepItem,
-  OuraReadinessItem,
-  OuraWorkoutItem,
-  OuraPaginationToken,
-  OuraTimestamp,
+  OuraRestTransportOptions,
+  ProviderCollection,
+  ProviderFailure,
+  ProviderFieldIssue,
+  SleepDto,
+  ReadinessDto,
+  WorkoutDto,
 } from "./types.js";
