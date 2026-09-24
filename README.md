@@ -80,3 +80,22 @@ npm run typecheck
 npm test -- --run
 npm run build
 ```
+
+## Synthetic recommendation CLI
+
+After building, run a recommendation over one of the bundled fabricated scenarios:
+
+```text
+npm run health -- recommend --synthetic well_recovered_runner --model <model-id>
+```
+
+An explicit `OPENAI_API_KEY` is required for an actual model run, which may incur
+model charges. The other bundled scenario IDs are `poor_sleep_low_recovery`,
+`strength_goal_good_recovery`, `late_evening_low_recovery`, and `missing_data`.
+Add `--json` for the structured result. When piping JSON, use
+`npm run --silent health -- recommend --synthetic well_recovered_runner --model <model-id> --json`
+so npm does not print its script banner.
+
+The command is marked **SYNTHETIC** and uses fabricated health data. It is not
+live Oura advice. Plain `health recommend` is blocked while live Oura agent
+integration remains subject to separate approval and implementation.

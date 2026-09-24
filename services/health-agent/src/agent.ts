@@ -16,10 +16,13 @@ export type RecommendSyntheticDependencies = {
   connect?: (scenarioId: ScenarioId) => Promise<HealthToolsConnection>;
   modelConfig?: Omit<ModelConfig, "modelId">;
   onToolCall?: (name: HealthToolName) => void;
+  signal?: AbortSignal;
 };
 export type SyntheticRecommendationRequest = { scenarioId: ScenarioId; modelId: string };
 
-function isUnknownScenario(scenarioId: string): boolean { return !(SCENARIO_IDS as readonly string[]).includes(scenarioId); }
+export function isSyntheticScenarioId(value: string): value is ScenarioId {
+  return (SCENARIO_IDS as readonly string[]).includes(value);
+}
 function failure(code: RecommendationError["code"]): RecommendationResult { return { ok: false, error: { code } }; }
 function safeError(error: unknown): RecommendationResult {
   if (error instanceof ModelRefusalError) return failure("MODEL_REFUSAL");
@@ -59,9 +62,12 @@ function createTools(connection: HealthToolsConnection, ledger: EvidenceLedger, 
 }
 
 export async function recommendSynthetic(request: SyntheticRecommendationRequest, dependencies: RecommendSyntheticDependencies): Promise<RecommendationResult> {
-  if (isUnknownScenario(request.scenarioId)) return failure("POLICY_BLOCKED");
+  if (!isSyntheticScenarioId(request.scenarioId)) return failure("POLICY_BLOCKED");
   const ledger = new EvidenceLedger();
   const controller = new AbortController();
+  const abort = () => controller.abort();
+  if (dependencies.signal?.aborted) abort();
+  dependencies.signal?.addEventListener("abort", abort, { once: true });
   const deadline = setTimeout(() => controller.abort(), RUN_TIMEOUT_MS);
   const connect = dependencies.connect ?? (async (scenarioId: ScenarioId) => connectHealthTools(createSyntheticHealthTools(loadScenarioFixture(scenarioId))));
   let connection: HealthToolsConnection | undefined;
@@ -84,6 +90,7 @@ export async function recommendSynthetic(request: SyntheticRecommendationRequest
     return safeError(error);
   } finally {
     clearTimeout(deadline);
+    dependencies.signal?.removeEventListener("abort", abort);
     ledger.clear();
     await connection?.close();
   }

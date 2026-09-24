@@ -1,8 +1,10 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { ScriptedModel, assistantMessage, functionCall } from "@openai/agents/testing";
+import { connectHealthTools, createSyntheticHealthTools } from "@ahp/health-tools";
 
 import { recommendSynthetic } from "../src/agent.js";
 import { replayScenario } from "../evals/replay.js";
+import { loadScenarioFixture } from "../evals/scenarios.js";
 
 describe("recommendSynthetic", () => {
   it("uses the actual MCP bridge before publishing a structured recommendation", async () => {
@@ -52,5 +54,24 @@ describe("recommendSynthetic", () => {
     expect(serializedRepairInput).toContain("obs_not_delivered");
     expect(serializedRepairInput).toContain(expected.rationaleClaims[0].evidenceIds[0]);
     model.assertComplete();
+  });
+
+  it("closes the tool connection after external cancellation", async () => {
+    const controller = new AbortController();
+    controller.abort();
+    const close = vi.fn(async () => undefined);
+    const result = await recommendSynthetic(
+      { scenarioId: "well_recovered_runner", modelId: "test-model" },
+      {
+        model: new ScriptedModel(),
+        signal: controller.signal,
+        connect: async () => {
+          const connection = await connectHealthTools(createSyntheticHealthTools(loadScenarioFixture("well_recovered_runner")));
+          return { ...connection, close: async () => { await connection.close(); await close(); } };
+        }
+      }
+    );
+    expect(result.ok).toBe(false);
+    expect(close).toHaveBeenCalledOnce();
   });
 });

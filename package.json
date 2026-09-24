@@ -10,15 +10,18 @@
   },
   "workspaces": [
     "packages/health-domain",
-    "packages/oura-client",
-    "apps/cli",
     "packages/health-tools",
-    "services/health-agent"
+    "services/health-agent",
+    "packages/oura-client",
+    "apps/cli"
   ],
   "scripts": {
-    "build": "npm run build --workspaces",
+    "build": "npm run build:ordered",
+    "build:ordered": "npm run build --workspace=@ahp/health-domain && npm run build --workspace=@ahp/health-tools && npm run build --workspace=@ahp/health-agent && npm run build --workspace=@ahp/oura-client && npm run build --workspace=@ahp/cli",
     "typecheck": "npm run typecheck --workspaces",
+    "pretest": "npm run build:ordered",
     "test": "vitest",
+    "health": "node apps/cli/dist/main.js",
     "eval:synthetic": "node services/health-agent/dist/evals/run.js"
   },
   "devDependencies": {

@@ -9,6 +9,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
+    "@ahp/health-agent": "0.0.0",
     "@ahp/health-domain": "0.0.0",
     "@ahp/oura-client": "0.0.0"
   }
