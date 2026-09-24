@@ -31,6 +31,12 @@ describe("OuraRestTransport", () => {
     const got = await new OuraRestTransport(session() as never, { fetch: fetch as typeof fetch }).listSleep(window);
     expect(got).toMatchObject({ complete: false, failure: { code: "INVALID_PROVIDER_DATA" } }); expect(got.records.map(x => x.id)).toEqual(["sleep-1", "two"]); expect(fetch.mock.calls[1][0].searchParams.get("next_token")).toBe("next");
   });
+  it("collapses identical duplicate records and reports conflicting duplicate identities", async () => {
+    const identical = new OuraRestTransport(session() as never, { fetch: vi.fn(async () => response({ data: [sleep, sleep], next_token: null })) as typeof fetch });
+    await expect(identical.listSleep(window)).resolves.toMatchObject({ complete: true, records: [expect.objectContaining({ id: "sleep-1" })], fieldIssues: [] });
+    const conflicting = new OuraRestTransport(session() as never, { fetch: vi.fn(async () => response({ data: [sleep, { ...sleep, total_sleep_duration: 10_000 }], next_token: null })) as typeof fetch });
+    await expect(conflicting.listSleep(window)).resolves.toMatchObject({ complete: false, fieldIssues: [{ recordId: "sleep-1", day: "2026-01-01", field: "id", code: "conflict" }] });
+  });
   it("enforces page, record, and decoded byte limits", async () => {
     const tooMany = new OuraRestTransport(session() as never, { fetch: vi.fn(async () => response({ data: [sleep, { ...sleep, id: "two" }], next_token: null })) as typeof fetch, limits: { maxRecordsPerPage: 1 } });
     await expect(tooMany.listSleep(window)).resolves.toMatchObject({ failure: { code: "LIMIT_REACHED" } });

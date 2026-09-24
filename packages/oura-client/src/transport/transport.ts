@@ -103,6 +103,11 @@ export class OuraRestTransport {
     if (kind === "sleep") { const a = string(v.bedtime_start), b = string(v.bedtime_end), type = v.type == null ? null : string(v.type), duration = v.total_sleep_duration == null ? null : number(v.total_sleep_duration), hr = v.lowest_heart_rate == null ? null : number(v.lowest_heart_rate); if (!a || !b) return push(id, day, !a ? "bedtime_start" : "bedtime_end"); item = { id, day, bedtimeStart: a, bedtimeEnd: b, type, totalSleepDuration: duration, lowestHeartRate: hr }; if (v.type != null && type === null) push(id, day, "type"); if (v.total_sleep_duration != null && duration === null) push(id, day, "total_sleep_duration"); if (v.lowest_heart_rate != null && hr === null) push(id, day, "lowest_heart_rate"); }
     if (kind === "readiness") { const timestamp = string(v.timestamp), score = v.score == null ? null : number(v.score); if (!timestamp) return push(id, day, "timestamp"); item = { id, day, timestamp, score }; if (v.score != null && score === null) push(id, day, "score"); }
     if (kind === "workout") { const a = string(v.start_datetime), b = string(v.end_datetime), activity = string(v.activity); if (!a || !b || !activity) return push(id, day, !a ? "start_datetime" : !b ? "end_datetime" : "activity"); item = { id, day, startDatetime: a, endDatetime: b, activity }; }
-    if (r.records.some(x => x.id === id)) return push(id, day, "id", "conflict"); r.records.push(item!);
+    const existing = r.records.find(x => x.id === id);
+    if (existing !== undefined) {
+      if (JSON.stringify(existing) === JSON.stringify(item)) return;
+      return push(id, day, "id", "conflict");
+    }
+    r.records.push(item!);
   }
 }

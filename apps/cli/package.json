@@ -8,5 +8,8 @@
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
-  "dependencies": { "@ahp/oura-client": "0.0.0" }
+  "dependencies": {
+    "@ahp/health-domain": "0.0.0",
+    "@ahp/oura-client": "0.0.0"
+  }
 }
